@@ -1,9 +1,6 @@
 FROM php:5.6-apache
 MAINTAINER Dylan Pinn <dylan@arcadiandigital.com.au>
 
-# Install net-tools
-RUN apt-get update && apt-get install -y net-tools
-
 # Install mysqli extension
 RUN docker-php-ext-install mysqli
 
