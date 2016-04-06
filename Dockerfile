@@ -21,7 +21,7 @@ RUN { \
   } > /usr/local/etc/php/conf.d/opcache-recommended.ini
 
 # Define rancher compose version
-ENV RANCHER_COMPOSE_VERSION v0.7.2
+ENV RANCHER_COMPOSE_VERSION v0.7.3
 
 # Download and install rancher compose
 RUN wget -O /tmp/rancher-compose-linux-amd64-${RANCHER_COMPOSE_VERSION}.tar.gz "https://github.com/rancher/rancher-compose/releases/download/${RANCHER_COMPOSE_VERSION}/rancher-compose-linux-amd64-${RANCHER_COMPOSE_VERSION}.tar.gz" \
@@ -38,5 +38,5 @@ RUN curl -L https://raw.github.com/wp-cli/builds/gh-pages/phar/wp-cli.phar > wp-
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod 777 /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
- 
+
 CMD ["apache2-foreground"]
