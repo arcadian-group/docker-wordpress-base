@@ -29,17 +29,13 @@ RUN curl -L https://raw.github.com/wp-cli/builds/gh-pages/phar/wp-cli.phar > wp-
 # Configure nginx
 RUN echo "daemon off;" >> /etc/nginx/nginx.conf
 RUN sed -i "s/sendfile on/sendfile off/" /etc/nginx/nginx.conf
-ADD build/nginx/default.conf /etc/nginx/sites-available/default.conf
-RUN rm /etc/nginx/sites-enabled/*
-RUN ln -s /etc/nginx/sites-available/default.conf /etc/nginx/sites-enabled/default
-# RUN mkdir -p /var/www/html
 
 # Configure PHP
 RUN sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php5/fpm/php.ini
-# RUN sed -i "s/;date.timezone =.*/date.timezone = Asia\/Kolkata/" /etc/php5/fpm/php.ini
+RUN sed -i "s/;date.timezone =.*/date.timezone = Australia\/Melbourne/" /etc/php5/fpm/php.ini
 RUN sed -i -e "s/;daemonize\s*=\s*yes/daemonize = no/g" /etc/php5/fpm/php-fpm.conf
 RUN sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php5/cli/php.ini
-# RUN sed -i "s/;date.timezone =.*/date.timezone = Asia\/Kolkata/" /etc/php5/cli/php.ini
+RUN sed -i "s/;date.timezone =.*/date.timezone = Australia\/Melbourne/" /etc/php5/cli/php.ini
 
 # Add nginx service
 RUN mkdir /etc/service/nginx
