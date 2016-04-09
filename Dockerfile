@@ -1,25 +1,15 @@
-FROM php:5.6-fpm
+FROM phusion/baseimage:0.9.18
 MAINTAINER Dylan Pinn <dylan@arcadiandigital.com.au>
 
-# install the PHP extensions we need
-RUN apt-get update && apt-get install -y libpng12-dev libjpeg-dev \
-  ca-certificates tar wget && rm -rf /var/lib/apt/lists/* \
-	&& docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr \
-	&& docker-php-ext-install gd mysqli opcache mbstring
+# Use baseimage-docker's init system.
+CMD ["/sbin/my_init"]
 
-  # set recommended PHP.ini settings
-  # see https://secure.php.net/manual/en/opcache.installation.php
-  RUN { \
-  		echo 'opcache.memory_consumption=128'; \
-  		echo 'opcache.interned_strings_buffer=8'; \
-  		echo 'opcache.max_accelerated_files=4000'; \
-  		echo 'opcache.revalidate_freq=60'; \
-  		echo 'opcache.fast_shutdown=1'; \
-  		echo 'opcache.enable_cli=1'; \
-      # Increase Post size
-      echo 'post_max_size=40M'; \
-      echo 'upload_max_filesize=40M'; \
-  	} > /usr/local/etc/php/conf.d/opcache-recommended.ini
+RUN apt-get update \
+    && apt-get install -y --force-yes \
+    nginx php5 php5-fpm php5-cli php5-mysql php5-curl php5-gd \
+    libpng12-dev libjpeg-dev ca-certificates tar wget
+
+RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Define rancher compose version
 ENV RANCHER_COMPOSE_VERSION v0.7.3
@@ -36,8 +26,33 @@ RUN curl -L https://raw.github.com/wp-cli/builds/gh-pages/phar/wp-cli.phar > wp-
   chmod +x wp-cli.phar;\
   mv wp-cli.phar /usr/bin/wp
 
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod 777 /entrypoint.sh
-ENTRYPOINT ["/entrypoint.sh"]
+# Configure nginx
+RUN echo "daemon off;" >> /etc/nginx/nginx.conf
+RUN sed -i "s/sendfile on/sendfile off/" /etc/nginx/nginx.conf
+ADD build/nginx/default.conf /etc/nginx/sites-available/default.conf
+RUN rm /etc/nginx/sites-enabled/*
+RUN ln -s /etc/nginx/sites-available/default.conf /etc/nginx/sites-enabled/default
+# RUN mkdir -p /var/www/html
 
-CMD ["php-fpm"]
+# Configure PHP
+RUN sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php5/fpm/php.ini
+# RUN sed -i "s/;date.timezone =.*/date.timezone = Asia\/Kolkata/" /etc/php5/fpm/php.ini
+RUN sed -i -e "s/;daemonize\s*=\s*yes/daemonize = no/g" /etc/php5/fpm/php-fpm.conf
+RUN sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php5/cli/php.ini
+# RUN sed -i "s/;date.timezone =.*/date.timezone = Asia\/Kolkata/" /etc/php5/cli/php.ini
+
+# Add nginx service
+RUN mkdir /etc/service/nginx
+ADD build/nginx/run.sh /etc/service/nginx/run
+RUN chmod +x /etc/service/nginx/run
+
+# Add PHP service
+RUN mkdir /etc/service/phpfpm
+ADD build/php/run.sh /etc/service/phpfpm/run
+RUN chmod +x /etc/service/phpfpm/run
+
+VOLUME ["/var/www/html", "/etc/nginx/sites-available", "/etc/nginx/sites-enabled"]
+
+WORKDIR /var/www/html
+
+EXPOSE 80
