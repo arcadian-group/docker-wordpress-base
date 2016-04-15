@@ -3,6 +3,9 @@ MAINTAINER Dylan Pinn <dylan@arcadiandigital.com.au>
 
 # Use baseimage-docker's init system.
 CMD ["/sbin/my_init"]
+ENV DEBIAN_FRONTEND noninteractive
+
+RUN add-apt-repository ppa:ondrej/php5-5.6 -y
 
 RUN apt-get update \
     && apt-get install -y --force-yes \
@@ -38,6 +41,7 @@ RUN sed -i -e "s/;daemonize\s*=\s*yes/daemonize = no/g" /etc/php5/fpm/php-fpm.co
 RUN sed -i "s/error_log = \/var\/log\/php5-fpm.log/error_log = syslog/" /etc/php5/fpm/php-fpm.conf
 RUN sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php5/cli/php.ini
 RUN sed -i "s/;date.timezone =.*/date.timezone = Australia\/Melbourne/" /etc/php5/cli/php.ini
+RUN sed -i "s/;clear_env = no/clear_env = no/" /etc/php5/fpm/pool.d/www.conf
 
 # Add nginx service
 RUN mkdir /etc/service/nginx
