@@ -4,6 +4,8 @@ MAINTAINER Dylan Pinn <dylan@arcadiandigital.com.au>
 # Use baseimage-docker's init system.
 CMD ["/sbin/my_init"]
 ENV DEBIAN_FRONTEND noninteractive
+RUN locale-gen en_AU.utf8
+ENV LANG=en_AU.utf8
 
 RUN add-apt-repository ppa:ondrej/php5-5.6 -y
 
@@ -15,7 +17,7 @@ RUN apt-get update \
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Define rancher compose version
-ENV RANCHER_COMPOSE_VERSION v0.7.3
+ENV RANCHER_COMPOSE_VERSION v0.7.4
 
 # Download and install rancher compose
 RUN wget -O /tmp/rancher-compose-linux-amd64-${RANCHER_COMPOSE_VERSION}.tar.gz "https://github.com/rancher/rancher-compose/releases/download/${RANCHER_COMPOSE_VERSION}/rancher-compose-linux-amd64-${RANCHER_COMPOSE_VERSION}.tar.gz" \
