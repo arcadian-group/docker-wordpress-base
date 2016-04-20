@@ -58,9 +58,7 @@ RUN mkdir /etc/service/phpfpm
 ADD build/php/run.sh /etc/service/phpfpm/run
 RUN chmod +x /etc/service/phpfpm/run
 
-VOLUME ["/var/www/html", "/etc/nginx/sites-available", "/etc/nginx/sites-enabled"]
-
 WORKDIR /var/www/html
-RUN chown -R www-data /var/www/html
+RUN chown -R www-data:www-data /var/www/html
 
 EXPOSE 80
