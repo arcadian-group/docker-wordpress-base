@@ -12,7 +12,7 @@ RUN add-apt-repository ppa:ondrej/php5-5.6 -y
 RUN apt-get update \
     && apt-get install -y --force-yes \
     nginx php5 php5-fpm php5-cli php5-mysql php5-curl php5-gd \
-    libpng12-dev libjpeg-dev ca-certificates tar wget
+    libpng12-dev libjpeg-dev ca-certificates tar wget imagemagick php5-imagick
 
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
