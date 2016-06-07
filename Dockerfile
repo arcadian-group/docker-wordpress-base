@@ -62,5 +62,6 @@ RUN chmod +x /etc/service/phpfpm/run
 
 WORKDIR /var/www/html
 RUN chown -R www-data:www-data /var/www/html
+ADD fix-wordpress-permissions.sh /var/www/fix-perms.sh
 
 EXPOSE 80
