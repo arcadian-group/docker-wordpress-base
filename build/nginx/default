@@ -22,7 +22,7 @@ server {
         deny all;
     }
 
-    location ~ .*\.(env|conf)$ {
+    location ~ .*\.(env)$ {
         deny all;
     }
 
