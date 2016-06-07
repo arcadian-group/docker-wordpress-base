@@ -48,6 +48,7 @@ RUN sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php5/cli/php.ini
 RUN sed -i "s/;date.timezone =.*/date.timezone = Australia\/Melbourne/" /etc/php5/cli/php.ini
 RUN sed -i "s/;clear_env = no/clear_env = no/" /etc/php5/fpm/pool.d/www.conf
 RUN sed -i "s/;request_terminate_timeout =.*/request_terminate_timeout = 300/g" /etc/php5/fpm/pool.d/www.conf
+RUN sed -i "s/pm.max_children =.*/pm.max_children = 10/g" /etc/php5/fpm/pool.d/www.conf
 # Fix Upload errror
 RUN sed -i "s/;upload_tmp_dir =*/upload_tmp_dir = \/tmp\//" /etc/php5/fpm/php.ini
 RUN chmod -R 777 /tmp/
