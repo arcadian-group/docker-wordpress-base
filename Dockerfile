@@ -17,7 +17,7 @@ RUN apt-get update \
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Define rancher compose version
-ENV RANCHER_COMPOSE_VERSION v0.8.4
+ENV RANCHER_COMPOSE_VERSION v0.8.5
 
 # Download and install rancher compose
 RUN wget -O /tmp/rancher-compose-linux-amd64-${RANCHER_COMPOSE_VERSION}.tar.gz "https://github.com/rancher/rancher-compose/releases/download/${RANCHER_COMPOSE_VERSION}/rancher-compose-linux-amd64-${RANCHER_COMPOSE_VERSION}.tar.gz" \
