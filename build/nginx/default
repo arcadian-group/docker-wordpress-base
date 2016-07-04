@@ -1,32 +1,32 @@
 server {
-    listen 80 default_server;
-    listen [::]:80 default_server ipv6only=on;
+	listen 80 default_server;
+	listen [::]:80 default_server ipv6only=on;
 
-    root /var/www/html;
-    index index.php index.html index.htm;
+	root /var/www/html;
+	index index.php index.html index.htm;
 
-    location / {
-         try_files $uri $uri/ /index.php$is_args$args;
-    }
+	location / {
+		 try_files $uri $uri/ /index.php$is_args$args;
+	}
 
-    location ~ \.php$ {
-        try_files $uri /index.php =404;
-        fastcgi_pass unix:/var/run/php5-fpm.sock;
-        fastcgi_index index.php;
-        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-        fastcgi_read_timeout 300;
-        include fastcgi_params;
-    }
+	location ~ \.php$ {
+		try_files $uri /index.php =404;
+		fastcgi_pass unix:/var/run/php5-fpm.sock;
+		fastcgi_index index.php;
+		fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+		fastcgi_read_timeout 300;
+		include fastcgi_params;
+	}
 
-    location ~ /\.ht {
-        deny all;
-    }
+	location ~ /\.ht {
+		deny all;
+	}
 
-    location ~ .*\.(env)$ {
-        deny all;
-    }
+	location ~ .*\.(env)$ {
+		deny all;
+	}
 
-    access_log /dev/stdout;
-    error_log /dev/stderr;
-    client_max_body_size 20m;
+	access_log /dev/stdout;
+	error_log /dev/stderr;
+	client_max_body_size 20m;
 }
