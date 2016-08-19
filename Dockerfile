@@ -30,6 +30,7 @@ RUN wget -O /tmp/rancher-compose-linux-amd64-${RANCHER_COMPOSE_VERSION}.tar.gz "
 RUN curl -L https://raw.github.com/wp-cli/builds/gh-pages/phar/wp-cli.phar > wp-cli.phar;\
   chmod +x wp-cli.phar;\
   mv wp-cli.phar /usr/bin/wp
+RUN echo 'alias wp="wp --allow-root"' >>  ~/.bashrc
 
 # Add Composer
 ADD install-composer.sh /root/install-composer.sh
