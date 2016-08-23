@@ -33,8 +33,10 @@ RUN curl -L https://raw.github.com/wp-cli/builds/gh-pages/phar/wp-cli.phar > wp-
 RUN echo 'alias wp="wp --allow-root"' >>  ~/.bashrc
 
 # Add Composer
+WORKDIR /root
 ADD install-composer.sh /root/install-composer.sh
 RUN /root/install-composer.sh
+RUN mv /root/composer.phar /usr/local/bin/composer
 
 # Configure nginx
 RUN echo "daemon off;" >> /etc/nginx/nginx.conf
