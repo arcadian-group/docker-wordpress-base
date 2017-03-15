@@ -1,4 +1,4 @@
-FROM phusion/baseimage:0.9.19
+FROM phusion/baseimage:0.9.18
 MAINTAINER Dylan Pinn <dylan@arcadiandigital.com.au>
 
 # Use baseimage-docker's init system.
