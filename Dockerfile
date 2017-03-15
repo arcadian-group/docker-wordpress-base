@@ -1,4 +1,4 @@
-FROM phusion/baseimage:0.9.18
+FROM phusion/baseimage:0.9.19
 MAINTAINER Dylan Pinn <dylan@arcadiandigital.com.au>
 
 # Use baseimage-docker's init system.
@@ -59,6 +59,9 @@ RUN sed -i "s/;request_terminate_timeout =.*/request_terminate_timeout = 300/g" 
 # Fix Upload errror
 RUN sed -i "s/;upload_tmp_dir =*/upload_tmp_dir = \/tmp\//" /etc/php/5.6/fpm/php.ini
 RUN chmod -R 777 /tmp/
+
+# HACK: This fixes unable to bind listening socket for address '/run/php/php5.6-fpm.sock': No such file or directory
+RUN mkdir /run/php
 
 # Add nginx service
 RUN mkdir /etc/service/nginx
