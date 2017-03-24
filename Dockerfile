@@ -13,7 +13,7 @@ RUN apt-get update \
     && apt-get install -y --force-yes \
     nginx php5.6 php5.6-fpm php5.6-cli php5.6-mysql php5.6-curl php5.6-gd \
     libpng12-dev libjpeg-dev ca-certificates tar wget imagemagick php5.6-imagick zip \
-    php5.6-mbstring
+    php5.6-mbstring php5.6-dom python-pip python-dev libxml
 
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
@@ -26,6 +26,8 @@ RUN wget -O /tmp/rancher-compose-linux-amd64-${RANCHER_COMPOSE_VERSION}.tar.gz "
   && mv /tmp/rancher-compose-${RANCHER_COMPOSE_VERSION}/rancher-compose /usr/local/bin/rancher-compose \
   && rm -R /tmp/rancher-compose-linux-amd64-${RANCHER_COMPOSE_VERSION}.tar.gz /tmp/rancher-compose-${RANCHER_COMPOSE_VERSION}\
   && chmod +x /usr/local/bin/rancher-compose
+
+RUN pip install awscli
 
 # Add WP-CLI
 RUN curl -L https://raw.github.com/wp-cli/builds/gh-pages/phar/wp-cli.phar > wp-cli.phar;\
@@ -79,3 +81,5 @@ RUN chown -R www-data:www-data /var/www/html
 ADD fix-wordpress-permissions.sh /var/www/fix-perms.sh
 
 EXPOSE 80
+
+RUN aws --version
