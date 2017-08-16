@@ -1,0 +1,12 @@
+options:
+  docker: true
+
+pipelines:
+  default:
+    - step:
+        script:
+          - export IMAGE_NAME=188074840841.dkr.ecr.ap-southeast-2.amazonaws.com/base/wordpress:5.6-nginx
+
+          - docker build -t $IMAGE_NAME .
+          - $(aws ecr get-login --no-include-email --region ap-southeast-2)
+          - docker push $IMAGE_NAME
