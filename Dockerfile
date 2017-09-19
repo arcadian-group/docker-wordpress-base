@@ -1,5 +1,5 @@
 FROM phusion/baseimage:0.9.18
-MAINTAINER Dylan Pinn <dylan@arcadiandigital.com.au>
+LABEL maintainer="dylan@arcadiandigital.com.au"
 
 # Use baseimage-docker's init system.
 CMD ["/sbin/my_init"]
