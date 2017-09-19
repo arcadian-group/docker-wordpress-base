@@ -72,5 +72,6 @@ ADD fix-wordpress-permissions.sh /var/www/fix-perms.sh
 
 EXPOSE 80
 
+# Add HEALTHCHECK for sites.
 HEALTHCHECK --interval=5m --timeout=3s \
   CMD curl -f http://localhost/ || exit 1
