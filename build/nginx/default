@@ -26,6 +26,22 @@ server {
 		deny all;
 	}
 
+	location ~ /\. {
+		deny all;
+	}
+
+	location /taskdef-production.json {
+		deny all;
+	}
+
+	location /taskdef-staging.json {
+		deny all;
+	}
+
+	location ~\.(yaml|yml)$ {
+		deny all;
+	}
+
 	location ~*  \.(jpg|jpeg|png|gif|ico|css|js|woff|woff2|ttf|otf)$ {
 	   expires 365d;
        add_header Pragma public;
