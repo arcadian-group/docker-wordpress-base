@@ -40,6 +40,7 @@ ADD build/nginx/default /etc/nginx/sites-available/default
 RUN sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php/5.6/fpm/php.ini
 RUN sed -i "s/;date.timezone =.*/date.timezone = Australia\/Melbourne/" /etc/php/5.6/fpm/php.ini
 RUN sed -i "s/upload_max_filesize =.*/upload_max_filesize = 32M/g" /etc/php/5.6/fpm/php.ini
+RUN sed -i "s/; max_input_vars =.*/max_input_vars = 10000/" /etc/php/5.6/fpm/php.ini
 RUN sed -i "s/post_max_size =.*/post_max_size = 32M/g" /etc/php/5.6/fpm/php.ini
 RUN sed -i "s/max_execution_time =.*/max_execution_time = 300/g" /etc/php/5.6/fpm/php.ini
 RUN sed -i -e "s/;daemonize\s*=\s*yes/daemonize = no/g" /etc/php/5.6/fpm/php-fpm.conf
