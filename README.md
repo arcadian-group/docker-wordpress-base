@@ -1,6 +1,6 @@
 # Docker WordPress Base Image
 
-This installs PHP5.6 & nginx on Ubuntu 14.04
+This installs PHP 5.6 & nginx on Ubuntu 14.04
 
 ## Tools Installed
 
