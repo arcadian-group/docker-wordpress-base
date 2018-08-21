@@ -16,6 +16,9 @@ server {
 		fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
 		fastcgi_read_timeout 300;
 		include fastcgi_params;
+
+		fastcgi_buffers 16 16k;
+		fastcgi_buffer_size 32k;
 	}
 
 	location ~ /\.ht {
@@ -44,8 +47,8 @@ server {
 
 	location ~*  \.(jpg|jpeg|png|gif|ico|css|js|woff|woff2|ttf|otf)$ {
 	   expires 365d;
-       add_header Pragma public;
-       add_header Cache-Control "public";
+	   add_header Pragma public;
+	   add_header Cache-Control "public";
 	}
 
 	access_log /dev/stdout;
