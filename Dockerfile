@@ -1,4 +1,4 @@
-FROM phusion/baseimage:0.10.1
+FROM phusion/baseimage:0.11
 LABEL maintainer="dylan@arcadiandigital.com.au"
 
 # Use baseimage-docker's init system.
@@ -12,7 +12,7 @@ RUN add-apt-repository ppa:ondrej/php -y
 RUN apt-get update \
     && apt-get install -y \
     nginx php7.2 php7.2-fpm php7.2-cli php7.2-mysql php7.2-curl php7.2-gd \
-    libpng12-dev libjpeg-dev ca-certificates tar wget \
+    libpng-dev libjpeg-dev ca-certificates tar wget \
     php7.2-xmlrpc imagemagick php7.2-imagick zip \
     php7.2-xml php7.2-zip \
     php7.2-mbstring php7.2-dom python-pip python-dev git libyaml-dev \
