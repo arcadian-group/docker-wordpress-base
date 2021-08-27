@@ -1,4 +1,4 @@
-FROM phusion/baseimage:0.10.1
+FROM phusion/baseimage:focal-1.0.0
 LABEL maintainer="sean@arcadiandigital.com.au"
 
 # Use baseimage-docker's init system.
@@ -12,11 +12,14 @@ RUN add-apt-repository ppa:ondrej/php -y
 RUN apt-get update \
     && apt-get install -y \
     nginx php7.4 php7.4-fpm php7.4-cli php7.4-mysql php7.4-curl php7.4-gd \
-    libpng12-dev libjpeg-dev ca-certificates tar wget \
+    libpng-dev libjpeg-dev ca-certificates tar wget \
     php7.4-xmlrpc imagemagick php7.4-imagick zip \
     php7.4-xml php7.4-zip \
-    php7.4-mbstring php7.4-dom python-pip python-dev git libyaml-dev \
+    php7.4-mbstring php7.4-dom python-dev git libyaml-dev \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+RUN curl https://bootstrap.pypa.io/pip/2.7/get-pip.py -o get-pip.py
+RUN python get-pip.py
 
 RUN pip install awscli
 
@@ -36,6 +39,7 @@ RUN mv /root/composer.phar /usr/local/bin/composer
 RUN echo "daemon off;" >> /etc/nginx/nginx.conf
 RUN sed -i "s/sendfile on/sendfile off/" /etc/nginx/nginx.conf
 ADD build/nginx/default /etc/nginx/sites-available/default
+ADD build/nginx/uploads.conf /etc/nginx/conf.d/uploads.conf
 
 # Configure PHP
 RUN sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php/7.4/fpm/php.ini
