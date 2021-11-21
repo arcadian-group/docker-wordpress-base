@@ -40,6 +40,7 @@ RUN mv /root/composer.phar /usr/local/bin/composer
 RUN echo "daemon off;" >> /etc/nginx/nginx.conf
 RUN sed -i "s/sendfile on/sendfile off/" /etc/nginx/nginx.conf
 ADD build/nginx/default /etc/nginx/sites-available/default
+ADD build/nginx/uploads.conf /etc/nginx/conf.d/uploads.conf
 
 # Configure PHP
 RUN sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php/8.0/fpm/php.ini
