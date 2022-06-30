@@ -2,6 +2,7 @@ FROM phusion/baseimage:focal-1.0.0
 LABEL maintainer="sean@arcadiandigital.com.au"
 
 # Use baseimage-docker's init system.
+CMD echo "ArcadianDigital AWS - 7.4-Nginx - Starting DockerFile..."
 CMD ["/sbin/my_init"]
 ENV DEBIAN_FRONTEND noninteractive
 RUN locale-gen en_AU.utf8
