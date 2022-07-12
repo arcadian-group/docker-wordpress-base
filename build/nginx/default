@@ -38,11 +38,27 @@ server {
 		deny all;
 	}
 
+    location ~\.(git|txt|md|yml|yaml|json)$ {
+		deny all;
+    }
+
 	location ~ /\. {
 		deny all;
 	}
 
 	location /taskdef-production.json {
+		deny all;
+	}
+
+    location /Dockerfile {
+		deny all;
+	}
+
+    location /README.md {
+		deny all;
+	}
+
+    location /docker-compose.yml {
 		deny all;
 	}
 
