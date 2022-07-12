@@ -38,10 +38,6 @@ server {
 		deny all;
 	}
 
-    location ~\.(git|txt|md|yml|yaml|json)$ {
-		deny all;
-    }
-
 	location ~ /\. {
 		deny all;
 	}
