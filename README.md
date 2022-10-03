@@ -8,4 +8,3 @@ This installs PHP 8.1 & nginx on Ubuntu 20.04
 - `composer`
 - `aws-cli`
 
-Test
