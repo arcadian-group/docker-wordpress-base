@@ -80,6 +80,11 @@ RUN mkdir /etc/service/phpfpm
 ADD build/php/run.sh /etc/service/phpfpm/run
 RUN chmod +x /etc/service/phpfpm/run
 
+# Add Memcached service
+RUN mkdir /etc/service/memcached
+ADD build/memcached/run.sh /etc/service/memcached/run
+RUN chmod +x /etc/service/memcached/run
+
 WORKDIR /var/www/html
 RUN chown -R www-data:www-data /var/www/html
 ADD fix-wordpress-permissions.sh /var/www/fix-perms.sh
