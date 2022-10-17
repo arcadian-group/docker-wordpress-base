@@ -16,6 +16,7 @@ RUN apt-get update \
     php8.0-xmlrpc imagemagick php8.0-imagick zip \
     php8.0-xml php8.0-zip \
     php8.0-mbstring php8.0-dom python3-pip python3-dev git libyaml-dev \
+    memcached php8.0-memcache libpcre3-dev uuid-dev libssl-dev libxml2-dev libgd-dev libxslt1-dev sudo \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.0.30.zip" -o "awscliv2.zip"
@@ -41,6 +42,11 @@ RUN echo "daemon off;" >> /etc/nginx/nginx.conf
 RUN sed -i "s/sendfile on/sendfile off/" /etc/nginx/nginx.conf
 ADD build/nginx/default /etc/nginx/sites-available/default
 ADD build/nginx/uploads.conf /etc/nginx/conf.d/uploads.conf
+ADD build/nginx/global /etc/nginx/global
+ADD build/nginx/modules-available /etc/nginx/modules-available
+ADD install-ngx-pagespeed.sh /root/install-ngx-pagespeed.sh
+RUN /root/install-ngx-pagespeed.sh
+RUN mkdir /var/ngx_pagespeed_cache; chown -R www-data:www-data /var/ngx_pagespeed_cache
 
 # Configure PHP
 RUN sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php/8.0/fpm/php.ini
@@ -57,6 +63,7 @@ RUN sed -i "s/;clear_env = no/clear_env = no/" /etc/php/8.0/fpm/pool.d/www.conf
 RUN sed -i "s/;request_terminate_timeout =.*/request_terminate_timeout = 300/g" /etc/php/8.0/fpm/pool.d/www.conf
 # Fix Upload errror
 RUN sed -i "s/;upload_tmp_dir =*/upload_tmp_dir = \/tmp\//" /etc/php/8.0/fpm/php.ini
+RUN echo 'opcache.jit_buffer_size=50M' >> /etc/php/8.0/cli/conf.d/10-opcache.ini
 RUN chmod -R 777 /tmp/
 
 # HACK: This fixes unable to bind listening socket for address '/run/php/php8.0-fpm.sock': No such file or directory
