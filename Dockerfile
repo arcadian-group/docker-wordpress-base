@@ -46,7 +46,7 @@ ADD build/nginx/global /etc/nginx/global
 ADD build/nginx/modules-available /etc/nginx/modules-available
 ADD install-ngx-pagespeed.sh /root/install-ngx-pagespeed.sh
 RUN /root/install-ngx-pagespeed.sh
-RUN ln -sf /etc/nginx/modules-enabled/50-mod-ngx-pagespeed.conf /etc/nginx/modules-available/50-mod-ngx-pagespeed.conf
+RUN ln -s /etc/nginx/modules-available/50-mod-ngx-pagespeed.conf /etc/nginx/modules-enabled/50-mod-ngx-pagespeed.conf
 RUN mkdir /var/ngx_pagespeed_cache; chown -R www-data:www-data /var/ngx_pagespeed_cache
 
 # Configure PHP
