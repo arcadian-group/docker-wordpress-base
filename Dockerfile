@@ -1,4 +1,4 @@
-FROM phusion/baseimage:focal-1.0.0
+FROM phusion/baseimage:jammy-1.0.4
 LABEL maintainer="sean@arcadiandigital.com.au"
 
 # Use baseimage-docker's init system.
@@ -8,10 +8,12 @@ RUN locale-gen en_AU.utf8
 ENV LANG=en_AU.utf8
 
 RUN add-apt-repository ppa:ondrej/php -y
+RUN add-apt-repository ppa:ondrej/nginx -y
 
 RUN apt-get update \
     && apt-get install -y \
-    nginx php8.0 php8.0-fpm php8.0-cli php8.0-mysql php8.0-curl php8.0-gd \
+    nginx libnginx-mod-http-brotli libnginx-mod-http-cache-purge \
+    php8.0 php8.0-fpm php8.0-cli php8.0-mysql php8.0-curl php8.0-gd \
     libpng-dev libjpeg-dev ca-certificates tar wget \
     php8.0-xmlrpc imagemagick php8.0-imagick zip \
     php8.0-xml php8.0-zip \
@@ -41,6 +43,7 @@ RUN echo "daemon off;" >> /etc/nginx/nginx.conf
 RUN sed -i "s/sendfile on/sendfile off/" /etc/nginx/nginx.conf
 ADD build/nginx/default /etc/nginx/sites-available/default
 ADD build/nginx/uploads.conf /etc/nginx/conf.d/uploads.conf
+ADD build/nginx/fastcgi-cache.conf /etc/nginx/conf.d/fastcgi-cache.conf
 
 # Configure PHP
 RUN sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php/8.0/fpm/php.ini
@@ -50,9 +53,8 @@ RUN sed -i "s/; max_input_vars =.*/max_input_vars = 10000/" /etc/php/8.0/fpm/php
 RUN sed -i "s/post_max_size =.*/post_max_size = 32M/g" /etc/php/8.0/fpm/php.ini
 RUN sed -i "s/max_execution_time =.*/max_execution_time = 300/g" /etc/php/8.0/fpm/php.ini
 RUN sed -i -e "s/;daemonize\s*=\s*yes/daemonize = no/g" /etc/php/8.0/fpm/php-fpm.conf
-RUN sed -i "s/error_log = \/var\/log\/php5-fpm.log/error_log = syslog/" /etc/php/8.0/fpm/php-fpm.conf
+RUN sed -i "s/error_log =.*/error_log = syslog/" /etc/php/8.0/fpm/php-fpm.conf
 RUN sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php/8.0/cli/php.ini
-RUN sed -i "s/;date.timezone =.*/date.timezone = Australia\/Melbourne/" /etc/php/8.0/cli/php.ini
 RUN sed -i "s/;clear_env = no/clear_env = no/" /etc/php/8.0/fpm/pool.d/www.conf
 RUN sed -i "s/;request_terminate_timeout =.*/request_terminate_timeout = 300/g" /etc/php/8.0/fpm/pool.d/www.conf
 # Fix Upload errror
