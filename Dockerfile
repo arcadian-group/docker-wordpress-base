@@ -1,9 +1,9 @@
 FROM phusion/baseimage:jammy-1.0.1
-LABEL maintainer="sean@arcadiandigital.com.au"
+LABEL maintainer="adrian@arcadiandigital.com.au"
 
 # Use baseimage-docker's init system.
 CMD ["/sbin/my_init"]
-ENV DEBIAN_FRONTEND noninteractive
+ENV DEBIAN_FRONTEND=noninteractive
 RUN locale-gen en_AU.utf8
 ENV LANG=en_AU.utf8
 
@@ -11,11 +11,11 @@ RUN add-apt-repository ppa:ondrej/php -y
 
 RUN apt-get update \
     && apt-get install -y \
-    nginx php8.2 php8.2-fpm php8.2-cli php8.2-mysql php8.2-curl php8.2-gd \
+    nginx php8.4 php8.4-fpm php8.4-cli php8.4-mysql php8.4-curl php8.4-gd \
     libpng-dev libjpeg-dev ca-certificates tar wget \
-    php8.2-xmlrpc imagemagick php8.2-imagick zip \
-    php8.2-xml php8.2-zip \
-    php8.2-mbstring php8.2-dom python3-pip python3-dev git libyaml-dev \
+    php8.4-xmlrpc imagemagick php8.4-imagick zip \
+    php8.4-xml php8.4-zip \
+    php8.4-mbstring php8.4-dom python3-pip python3-dev git libyaml-dev \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
@@ -43,23 +43,23 @@ ADD build/nginx/default /etc/nginx/sites-available/default
 ADD build/nginx/uploads.conf /etc/nginx/conf.d/uploads.conf
 
 # Configure PHP
-RUN sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php/8.2/fpm/php.ini
-RUN sed -i "s/;date.timezone =.*/date.timezone = Australia\/Melbourne/" /etc/php/8.2/fpm/php.ini
-RUN sed -i "s/upload_max_filesize =.*/upload_max_filesize = 32M/g" /etc/php/8.2/fpm/php.ini
-RUN sed -i "s/; max_input_vars =.*/max_input_vars = 10000/" /etc/php/8.2/fpm/php.ini
-RUN sed -i "s/post_max_size =.*/post_max_size = 32M/g" /etc/php/8.2/fpm/php.ini
-RUN sed -i "s/max_execution_time =.*/max_execution_time = 300/g" /etc/php/8.2/fpm/php.ini
-RUN sed -i -e "s/;daemonize\s*=\s*yes/daemonize = no/g" /etc/php/8.2/fpm/php-fpm.conf
-RUN sed -i "s/error_log = \/var\/log\/php5-fpm.log/error_log = syslog/" /etc/php/8.2/fpm/php-fpm.conf
-RUN sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php/8.2/cli/php.ini
-RUN sed -i "s/;date.timezone =.*/date.timezone = Australia\/Melbourne/" /etc/php/8.2/cli/php.ini
-RUN sed -i "s/;clear_env = no/clear_env = no/" /etc/php/8.2/fpm/pool.d/www.conf
-RUN sed -i "s/;request_terminate_timeout =.*/request_terminate_timeout = 300/g" /etc/php/8.2/fpm/pool.d/www.conf
+RUN sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php/8.4/fpm/php.ini
+RUN sed -i "s/;date.timezone =.*/date.timezone = Australia\/Melbourne/" /etc/php/8.4/fpm/php.ini
+RUN sed -i "s/upload_max_filesize =.*/upload_max_filesize = 32M/g" /etc/php/8.4/fpm/php.ini
+RUN sed -i "s/; max_input_vars =.*/max_input_vars = 10000/" /etc/php/8.4/fpm/php.ini
+RUN sed -i "s/post_max_size =.*/post_max_size = 32M/g" /etc/php/8.4/fpm/php.ini
+RUN sed -i "s/max_execution_time =.*/max_execution_time = 300/g" /etc/php/8.4/fpm/php.ini
+RUN sed -i -e "s/;daemonize\s*=\s*yes/daemonize = no/g" /etc/php/8.4/fpm/php-fpm.conf
+RUN sed -i "s/error_log = \/var\/log\/php5-fpm.log/error_log = syslog/" /etc/php/8.4/fpm/php-fpm.conf
+RUN sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php/8.4/cli/php.ini
+RUN sed -i "s/;date.timezone =.*/date.timezone = Australia\/Melbourne/" /etc/php/8.4/cli/php.ini
+RUN sed -i "s/;clear_env = no/clear_env = no/" /etc/php/8.4/fpm/pool.d/www.conf
+RUN sed -i "s/;request_terminate_timeout =.*/request_terminate_timeout = 300/g" /etc/php/8.4/fpm/pool.d/www.conf
 # Fix Upload errror
-RUN sed -i "s/;upload_tmp_dir =*/upload_tmp_dir = \/tmp\//" /etc/php/8.2/fpm/php.ini
+RUN sed -i "s/;upload_tmp_dir =*/upload_tmp_dir = \/tmp\//" /etc/php/8.4/fpm/php.ini
 RUN chmod -R 777 /tmp/
 
-# HACK: This fixes unable to bind listening socket for address '/run/php/php8.2-fpm.sock': No such file or directory
+# HACK: This fixes unable to bind listening socket for address '/run/php/php8.4-fpm.sock': No such file or directory
 RUN mkdir /run/php
 
 # Add nginx service
